@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class Neuron :
     def __init__(self, input_size): #init neurones values, weight values and bias values
-        self.weights = np.random.uniform(-1.0, 1.0, size = (input_size,))
+        self.weights = np.random.uniform(0.5, 1.0, size = (input_size,))
         self.bias = 0
         self.value = 0
         self.activated_value = 0
@@ -103,22 +103,22 @@ class NeuralNetwork :
         plt.ylabel('Mean error')
         plt.title('Error evolution through epoch')
         plt.legend()
-        plt.show()
+        plt.savefig("error_plot.png")
+        print("Plot saved as 'error_plot.png'")
         
-    def test(self, input, output_ref) :
-        for i, sample in enumerate(input) :
+    def test(self, input_set, output_ref_set) :
+        for i, sample in enumerate(input_set) :
             self.forward_pass(sample)
             output_pred = []
             for neurons in self.output_neurons :
                 output_pred.append(round(float(neurons.activated_value), 2)) #we limit the prediction to 2 decimals
-            print("predicted : ", output_pred, " | ref : ", output_ref[i])
+            print("predicted : ", output_pred, " | ref : ", output_ref_set[i])
         
 
 # -----------------------Test of the entire NN-------------------------------     
-nn = NeuralNetwork(2, 2, 1, 0.1) #(input_size, hidden_size, output_size, lr)
-input = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-output = np.array([[0], [1], [1], [0]])
-nn.train(input, output, 10000)
-
-nn.test(input, output)
+nn = NeuralNetwork(2, 2, 1, 0.2) #(sample_size, hidden_size, output_size, lr)
+input_set = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+output_set = np.array([[0], [1], [1], [0]])
+nn.train(input_set, output_set, 10000)
+nn.test(input_set, output_set)
 
